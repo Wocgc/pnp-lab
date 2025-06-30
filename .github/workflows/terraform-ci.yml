@@ -40,10 +40,10 @@ jobs: # GitHub Actions가 실행될 환경
         id: plan # plan step의 출력을 다음 step에서 참조하기 위해 ID 설정
         run: | 
           terraform plan -no-color > plan.txt # -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
-          echo '```' >> plan.txt
-          cat plan.txt
-          echo '```' >> plan.txt
-
+          echo '```' > wrapped.txt
+          cat plan.txt >> wrapped.txt
+          echo '```' >> wrapped.txt
+          mv wrapped.txt plan.txt
       - name: Comment PR with Plan Result
         uses: actions/github-script@v7
         with:
