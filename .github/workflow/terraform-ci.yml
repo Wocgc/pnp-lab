@@ -1,15 +1,17 @@
-name: Terraform CI
+name: Terraform CI with PR Comment
 
 on:  # 트리거 조건
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ main ]
 
 jobs: # GitHub Actions가 실행될 환경
   terraform:
-    name: Terraform Format & Validate & Plan
+    name: Terraform Plan + PR Comment
     runs-on: ubuntu-latest
+
+
+    permissions:
+      pull-requests: write  # PR에 코멘트 달기 위해 필요
 
     steps: # 실제 실행 단계들
       - name: Checkout repository
@@ -33,4 +35,22 @@ jobs: # GitHub Actions가 실행될 환경
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -no-color # -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
+        id: plan # plan step의 출력을 다음 step에서 참조하기 위해 ID 설정
+        run: | 
+          terraform plan -no-color > plan.txt# -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
+          echo '```' >> plan.txt
+          cat plan.txt
+          echo '```' >> plan.txt
+
+      - name: Comment PR with Plan Result
+        uses: actions/github-script@v7
+        with:
+          script: \
+            const fs = require('fs');
+            const planOutput = fs.readFileSync('plan.txt', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🛠️ Terraform Plan Result:\n\n${planOutput}`
+            });
