@@ -37,4 +37,4 @@ jobs: # GitHub Actions가 실행될 환경
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -no-color > plan.txt # -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
+        run: terraform plan -no-color # -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
