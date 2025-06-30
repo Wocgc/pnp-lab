@@ -45,6 +45,7 @@ jobs: # GitHub Actions가 실행될 환경
           echo '```' >> wrapped.txt
           mv wrapped.txt plan.txt
       - name: Comment PR with Plan Result
+        if: github.event.pull_request
         uses: actions/github-script@v7
         with:
           script: |
