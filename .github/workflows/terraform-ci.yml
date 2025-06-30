@@ -21,7 +21,7 @@ jobs: # GitHub Actions가 실행될 환경
         # GitHub Actions가 이 레포의 코드를 가상머신에 다운르도해서 사용할 수 있게 함(git clone 같은 역할)
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v4
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.6
 
