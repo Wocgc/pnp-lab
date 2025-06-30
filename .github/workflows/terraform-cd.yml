@@ -24,7 +24,7 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-
+    
       - name: Terraform Apply
         run: |
           terraform apply \
@@ -47,4 +47,3 @@ jobs:
             -var='rds_multi_az=true' \
             -var='rds_publicly_accessible=false' \
             --auto-approve
-
