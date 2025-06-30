@@ -1,8 +1,10 @@
 name: Terraform CD
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Terraform CI"]
+    types: 
+      - completed
 
 jobs:
   terraform-apply:
