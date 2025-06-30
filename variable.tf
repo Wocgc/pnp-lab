@@ -79,11 +79,11 @@ variable "rds_publicly_accessible" {
 }
 
 variable "mgmt_ami" {
-  type = string
+  type    = string
   default = "ami-0662f4965dfc70aca"
 }
 
 variable "mgmt_instance_type" {
-  type = string
+  type    = string
   default = "t2.micro"
 }
