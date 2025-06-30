@@ -3,6 +3,8 @@ name: Terraform CI with PR Comment
 on:  # 트리거 조건
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs: # GitHub Actions가 실행될 환경
   terraform:
