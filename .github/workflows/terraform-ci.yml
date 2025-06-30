@@ -37,4 +37,24 @@ jobs: # GitHub Actions가 실행될 환경
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -no-color # -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
+        run: |
+          terraform plan \
+            -no-color \
+            -var='aws_region=ap-northeast-2' \
+            -var='vpc_cidr=10.0.0.0/16' \
+            -var='public_subnet_cidrs=["10.0.0.0/24","10.0.10.0/24"]' \
+            -var='private_subnet_cidrs=["10.0.1.0/24","10.0.11.0/24"]' \
+            -var='private_subnet_2_cidrs=["10.0.2.0/24","10.0.12.0/24"]' \
+            -var='private_rds_subnet_cidrs=["10.0.3.0/24","10.0.13.0/24"]' \
+            -var='availability_zones=["ap-northeast-2a","ap-northeast-2c"]' \
+            -var='mgmt_ami=ami-0662f4965dfc70aca' \
+            -var='mgmt_instance_type=t2.micro' \
+            -var='rds_identifier=cgc-pnp-rds' \
+            -var='rds_engine=mysql' \
+            -var='rds_engine_version=8.0.41' \
+            -var='rds_instance_class=db.t3.micro' \
+            -var='rds_allocated_storage=20' \
+            -var='rds_username=pnp' \
+            -var='rds_password=${{ secrets.RDS_PASSWORD }}' \
+            -var='rds_multi_az=true' \
+            -var='rds_publicly_accessible=false' \
