@@ -1,24 +1,22 @@
-name: Terraform CI 
+name: Terraform CI
 
-on:  # 트리거 조건
+on:
   pull_request:
     branches: [ main ]
   push:
     branches: [ main ]
 
-jobs: # GitHub Actions가 실행될 환경
+jobs:
   terraform:
-    name: Terraform Plan 
+    name: Terraform Plan
     runs-on: ubuntu-latest
 
-
     permissions:
-      pull-requests: write  # PR에 코멘트 달기 위해 필요
+      pull-requests: write
 
-    steps: # 실제 실행 단계들
+    steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # checkout - GitHub 코드 내려받기
-        # GitHub Actions가 이 레포의 코드를 가상머신에 다운르도해서 사용할 수 있게 함(git clone 같은 역할)
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -26,12 +24,10 @@ jobs: # GitHub Actions가 실행될 환경
           terraform_version: 1.6.6
 
       - name: Terraform Format
-        run: terraform fmt -check -recursive # recursive - 하위 dir까지 전부 검사
-
+        run: terraform fmt -check -recursive
 
       - name: Terraform Init
-        run: terraform init -backend=false # -backend=false -> s3같은 리모트 백엔드 연결 생략하고 로컬만 사용(CI에서는 보통 이렇게 함)
-
+        run: terraform init -input=false -reconfigure
 
       - name: Terraform Validate
         run: terraform validate
@@ -55,6 +51,7 @@ jobs: # GitHub Actions가 실행될 환경
             -var='rds_instance_class=db.t3.micro' \
             -var='rds_allocated_storage=20' \
             -var='rds_username=pnp' \
-            -var='rds_password=${{ secrets.RDS_PASSWORD }}' \
+            -var="rds_password=${{ secrets.RDS_PASSWORD }}" \
             -var='rds_multi_az=true' \
-            -var='rds_publicly_accessible=false' \
+            -var='rds_publicly_accessible=false'
+

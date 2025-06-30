@@ -98,6 +98,9 @@ resource "aws_internet_gateway" "cgc_igw" {
 
 resource "aws_eip" "eip_for_nat" {
   domain = "vpc"
+
+  tags = {
+    Name = "cgc-eip"
 }
 
 resource "aws_nat_gateway" "cgc_pnp_nat" {
@@ -105,7 +108,7 @@ resource "aws_nat_gateway" "cgc_pnp_nat" {
   subnet_id     = aws_subnet.public_subnet_a.id
 
   tags = {
-    Name = "pnp-lab-nat"
+    Name = "pnp-cgc-nat"
   }
 }
 
