@@ -1,0 +1,36 @@
+name: Terraform CI
+
+on:  # 트리거 조건
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs: # GitHub Actions가 실행될 환경
+  terraform:
+    name: Terraform Format & Validate & Plan
+    runs-on: ubuntu-latest
+
+    steps: # 실제 실행 단계들
+      - name: Checkout repository
+        uses: actions/checkout@v4 # checkout - GitHub 코드 내려받기
+        # GitHub Actions가 이 레포의 코드를 가상머신에 다운르도해서 사용할 수 있게 함(git clone 같은 역할)
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive # recursive - 하위 dir까지 전부 검사
+
+
+      - name: Terraform Init
+        run: terraform init -backend=false # -backend=false -> s3같은 리모트 백엔드 연결 생략하고 로컬만 사용(CI에서는 보통 이렇게 함)
+
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -no-color # -no-color CI 로그가 컬러 없이 출력 되도록함(컬러 때문에 로그 깨지는거 방지)
