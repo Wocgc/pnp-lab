@@ -101,7 +101,7 @@ resource "aws_eip" "eip_for_nat" {
 
   tags = {
     Name = "cgc-eip"
- }
+  }
 }
 
 resource "aws_nat_gateway" "cgc_pnp_nat" {
