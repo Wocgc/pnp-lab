@@ -33,7 +33,7 @@ jobs:
         working-directory: terraform/eks
 
       - name: Terraform Plan (eks)
-        run: terraform plan -no-color
+        run: terraform plan -no-color -compact-warnings
         working-directory: terraform/eks
 
       - name: Terraform Apply (eks)
