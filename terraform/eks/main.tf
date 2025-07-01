@@ -42,7 +42,7 @@ module "eks" {
       max_size       = 3
       min_size       = 1
       instance_types = ["t3.medium"]
-      iam_role_arn   = data.terraform_remote_state.base.outputs.eks_node_role_arn
+      iam_role_arn   = data.terraform_remote_state.base.outputs.eks_node_group_role_arn
     }
   }
 
