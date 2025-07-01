@@ -60,7 +60,7 @@ jobs:
         working-directory: terraform/base
 
       - name: Terraform Apply (base)
-        run: terraform apply --auto-approve
+        run: |
           terraform apply -auto-approve \
             -var='aws_region=ap-northeast-2' \
             -var='vpc_cidr=10.0.0.0/16' \
