@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 data "terraform_remote_state" "base" {
-  backend = "s3" # or local if you're still local
+  backend = "s3" 
 
   config = {
     bucket = "cgc-test-terraform-state"
