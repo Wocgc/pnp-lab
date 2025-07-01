@@ -36,7 +36,9 @@ jobs:
         working-directory: terraform/base
 
       - name: Terraform Plan (base)
-        run: terraform plan -no-color \
+        run: |
+          terraform plan \
+            -no-color \
             -var='aws_region=ap-northeast-2' \
             -var='vpc_cidr=10.0.0.0/16' \
             -var='public_subnet_cidrs=["10.0.0.0/24","10.0.10.0/24"]' \
