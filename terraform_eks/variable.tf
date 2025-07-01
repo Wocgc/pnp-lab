@@ -85,5 +85,5 @@ variable "mgmt_ami" {
 
 variable "mgmt_instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t3.small"
 }
