@@ -32,7 +32,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Terraform Init (base)
-        run: terraform init -input=false -reconfigure
+        run: terraform init -input=false -upgrade -reconfigure
         working-directory: terraform/base
 
       - name: Terraform Plan (base)
