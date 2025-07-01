@@ -37,6 +37,6 @@ jobs:
         working-directory: terraform/eks
 
       - name: Terraform Apply (eks)
-        run: terraform apply -auto-approve
+        run: terraform apply --auto-approve
         working-directory: terraform/eks
 

@@ -60,6 +60,6 @@ jobs:
         working-directory: terraform/base
 
       - name: Terraform Apply (base)
-        run: terraform apply -auto-approve
+        run: terraform apply --auto-approve
         working-directory: terraform/base
 
