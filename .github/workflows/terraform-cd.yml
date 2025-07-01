@@ -30,8 +30,10 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -input=false -reconfigure
-    
+        working-directory: terraform_eks
+
       - name: Terraform Apply
+        working-directory: terraform_eks        
         run: |
           terraform apply \
             -var='aws_region=ap-northeast-2' \

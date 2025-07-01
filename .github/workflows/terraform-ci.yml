@@ -28,11 +28,14 @@ jobs:
           aws-region: ap-northeast-2  
       - name: Terraform Init
         run: terraform init -input=false -reconfigure
+        working-directory: terraform_eks
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: terraform_eks
 
       - name: Terraform Plan
+        working-directory: terraform_eks
         run: |
           terraform plan \
             -no-color \
