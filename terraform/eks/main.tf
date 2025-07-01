@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.0"
+      version = "~> 5.29"
     }
   }
 }
@@ -23,24 +23,22 @@ data "terraform_remote_state" "base" {
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  version         = "20.8.4"
+  version         = "20.6.0"
   cluster_name    = "cgc-key"
   cluster_version = "1.32"
   vpc_id          = data.terraform_remote_state.base.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.base.outputs.private_subnet_ids
-  cluster_role_arn = data.terraform_remote_state.base.outputs.eks_cluster_role_arn
   enable_irsa      = true
 
   enable_cluster_creator_admin_permissions = true
-
-  access_config = {
-    endpoint_public_access  = true
-    endpoint_private_access = true
-  }
+  
+  # EKS API 접근 권한
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
 
   eks_managed_node_groups = {
     default = {
-      desired_size   = 2
+     desired_size   = 2
       max_size       = 3
       min_size       = 1
       instance_types = ["t3.medium"]
