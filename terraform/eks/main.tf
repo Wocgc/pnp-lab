@@ -23,7 +23,7 @@ data "terraform_remote_state" "base" {
 
 # ✅ 클러스터 먼저 생성 후 안정화 시점 기다리기
 resource "null_resource" "wait_for_cluster" {
-  depends_on = [module.eks.aws_eks_cluster.this]
+  depends_on = [module.eks]
 }
 
 module "eks" {
