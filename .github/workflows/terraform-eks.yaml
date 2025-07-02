@@ -66,7 +66,7 @@ jobs:
 
       - name: Terraform Init (nodegroup)
         run: terraform init -input=false -upgrade -reconfigure
-        working-directory: terraform/eks/nodegroup
+        working-directory: terraform/eks
 
       - name: Terraform Plan - NodeGroup + Addons
         run: terraform plan -no-color -compact-warnings
@@ -74,6 +74,7 @@ jobs:
         
 
       - name: Terraform Apply - NodeGroup + Addons
+        id: apply-nodegroup
         run: terraform apply --auto-approve
         working-directory: terraform/eks
         continue-on-error: true  # 💥 실패해도 다음 단계 실행

@@ -2,7 +2,7 @@ module "eks_nodegroup" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "20.6.0"
 
-  cluster_name    = "cgc-cluster"
+  cluster_name = data.terraform_remote_state.eks_cluster.outputs.cluster_name
   cluster_version = "1.32"
   vpc_id          = data.terraform_remote_state.base.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.base.outputs.private_subnet_ids
@@ -18,6 +18,32 @@ module "eks_nodegroup" {
       iam_role_arn   = data.terraform_remote_state.base.outputs.eks_node_group_role_arn
     }
   }
+
+  cluster_addons = {
+  coredns = {
+    resolve_conflicts = "OVERWRITE"
+  }
+
+  kube-proxy = {
+    resolve_conflicts = "OVERWRITE"
+  }
+
+  vpc-cni = {
+    resolve_conflicts = "OVERWRITE"
+  }
+
+  eks-pod-identity-agent = {
+    resolve_conflicts = "OVERWRITE"
+  }
+
+  metrics-server = {
+    resolve_conflicts = "OVERWRITE"
+  }
+
+  external-dns = {
+    resolve_conflicts = "OVERWRITE"
+  }
+}
 
   node_security_group_additional_rules = {
     ingress_self_all = {
