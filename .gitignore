@@ -1,0 +1,6 @@
+.terraform/
+.terraform.tfstate
+.tfstate.backup
+terraform.tfvars
+cgckey.pem
+.terraform.lock.hcl
