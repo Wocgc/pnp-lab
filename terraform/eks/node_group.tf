@@ -1,3 +1,12 @@
+data "terraform_remote_state" "eks_cluster" {
+  backend = "s3"
+  config = {
+    bucket = "cgc-test-terraform-state"
+    key    = "eks/terraform.tfstate"       # 📌 정확한 클러스터 tfstate 경로
+    region = "ap-northeast-2"
+  }
+}
+
 module "eks_nodegroup" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "20.6.0"
