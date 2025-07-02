@@ -24,7 +24,7 @@ data "terraform_remote_state" "base" {
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "20.6.0"
-  cluster_name    = "cgc-key"
+  cluster_name    = "cgc-cluster"
   cluster_version = "1.32"
   vpc_id          = data.terraform_remote_state.base.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.base.outputs.private_subnet_ids
@@ -37,8 +37,8 @@ module "eks" {
   cluster_endpoint_private_access = true
 
   eks_managed_node_groups = {
-    default = {
-     desired_size   = 2
+    cgc_node_group = {
+      desired_size   = 2
       max_size       = 3
       min_size       = 1
       instance_types = ["t3.medium"]
