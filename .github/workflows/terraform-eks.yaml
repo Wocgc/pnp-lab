@@ -28,12 +28,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Terraform Init
+      - name: Terraform Init (cluster)
         run: terraform init -input=false -upgrade -reconfigure
         working-directory: terraform/eks
 
       - name: Terraform Apply - EKS Cluster Only
-        run: terraform apply -target=module.eks.aws_eks_cluster.this --auto-approve
+        run: terraform apply --auto-approve
         working-directory: terraform/eks
 
   terraform-nodegroup:
@@ -57,15 +57,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Terraform Init
+      - name: Terraform Init (nodegroup)
         run: terraform init -input=false -upgrade -reconfigure
-        working-directory: terraform/eks
+        working-directory: terraform/eks/nodegroup
 
-      - name: Terraform Plan - Remaining Resources
+      - name: Terraform Plan - NodeGroup + Addons
         run: terraform plan -no-color -compact-warnings
         working-directory: terraform/eks
 
       - name: Terraform Apply - NodeGroup + Addons
         run: terraform apply --auto-approve
         working-directory: terraform/eks
-
