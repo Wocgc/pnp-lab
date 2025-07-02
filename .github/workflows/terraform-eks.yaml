@@ -4,11 +4,11 @@ on:
   workflow_run:
     workflows: ["Terraform CI/CD - Base"]
     types:
-      - completed 
+      - completed
 
 jobs:
-  terraform:
-    name: Terraform Apply - EKS
+  terraform-cluster:
+    name: Step 1 - Create EKS Cluster Only
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
@@ -28,16 +28,44 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Terraform Init (eks)
+      - name: Terraform Init
         run: terraform init -input=false -upgrade -reconfigure
         working-directory: terraform/eks
 
-      - name: Terraform Plan (eks)
-        continue-on-error: true
+      - name: Terraform Apply - EKS Cluster Only
+        run: terraform apply -target=module.eks.aws_eks_cluster.this --auto-approve
+        working-directory: terraform/eks
+
+  terraform-nodegroup:
+    name: Step 2 - Create NodeGroup + Addons
+    needs: terraform-cluster
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Terraform Init
+        run: terraform init -input=false -upgrade -reconfigure
+        working-directory: terraform/eks
+
+      - name: Terraform Plan - Remaining Resources
         run: terraform plan -no-color -compact-warnings
         working-directory: terraform/eks
 
-      - name: Terraform Apply (eks)
+      - name: Terraform Apply - NodeGroup + Addons
         run: terraform apply --auto-approve
         working-directory: terraform/eks
 
