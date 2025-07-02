@@ -33,7 +33,14 @@ jobs:
         working-directory: terraform/eks
 
       - name: Terraform Apply - EKS Cluster Only
+        id: apply-cluster
         run: terraform apply --auto-approve
+        working-directory: terraform/eks
+        continue-on-error: true  # 💥 실패 감지용
+
+      - name: Destroy Cluster if Apply Failed
+        if: steps.apply-cluster.outcome == 'failure'  # 💥 실패했을 때만 실행
+        run: terraform destroy --auto-approve
         working-directory: terraform/eks
 
   terraform-nodegroup:
@@ -64,7 +71,14 @@ jobs:
       - name: Terraform Plan - NodeGroup + Addons
         run: terraform plan -no-color -compact-warnings
         working-directory: terraform/eks
+        
 
       - name: Terraform Apply - NodeGroup + Addons
         run: terraform apply --auto-approve
+        working-directory: terraform/eks
+        continue-on-error: true  # 💥 실패해도 다음 단계 실행
+
+      - name: Destroy NodeGroup if Apply Failed
+        if: steps.apply-nodegroup.outcome == 'failure'  # 💥 실패 시에만
+        run: terraform destroy --auto-approve
         working-directory: terraform/eks

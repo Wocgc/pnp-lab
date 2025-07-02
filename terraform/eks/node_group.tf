@@ -7,11 +7,7 @@ module "eks_nodegroup" {
   vpc_id          = data.terraform_remote_state.base.outputs.vpc_id
   subnet_ids      = data.terraform_remote_state.base.outputs.private_subnet_ids
 
-  manage_aws_auth_configmap = false # 이미 클러스터에서 했으므로 비활성화
-
-  create_eks = false  # ❌ 클러스터 생성 안 함
   create_node_security_group = true
-  create_eks_managed_node_group = true  # ✅ 여기서 NodeGroup만 생성
 
   eks_managed_node_groups = {
     cgc_node_group = {

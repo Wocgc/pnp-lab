@@ -35,8 +35,6 @@ module "eks_cluster" {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
-  create_eks = true
   create_node_security_group = true
-  create_eks_managed_node_group = false  # ❌ 노드 그룹 생성 안 함:
 }
 
