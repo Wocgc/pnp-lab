@@ -44,7 +44,7 @@ jobs:
         working-directory: terraform/eks
 
   terraform-nodegroup:
-    name: Step 2 - Create NodeGroup + Addons
+    name: Step 2 - Create NodeGroup
     needs: terraform-cluster
     runs-on: ubuntu-latest
 
@@ -68,12 +68,12 @@ jobs:
         run: terraform init -input=false -upgrade -reconfigure
         working-directory: terraform/eks
 
-      - name: Terraform Plan - NodeGroup + Addons
+      - name: Terraform Plan - NodeGroup
         run: terraform plan -no-color -compact-warnings
         working-directory: terraform/eks
         
 
-      - name: Terraform Apply - NodeGroup + Addons
+      - name: Terraform Apply - NodeGroup
         id: apply-nodegroup
         run: terraform apply --auto-approve
         working-directory: terraform/eks

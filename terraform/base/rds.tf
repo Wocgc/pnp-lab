@@ -20,4 +20,5 @@ resource "aws_db_instance" "rds" {
   multi_az               = var.rds_multi_az
   publicly_accessible    = var.rds_publicly_accessible
   skip_final_snapshot    = true
+  name                   = "petclinic"
 }
