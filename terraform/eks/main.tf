@@ -36,5 +36,39 @@ module "eks_cluster" {
   cluster_endpoint_private_access = true
 
   create_node_security_group = true
+  # ✅ KMS 중복 생성 방지
+  create_kms_key            = false
+
+  # ✅ CloudWatch 로그 중복 생성 방지
+  create_cloudwatch_log_group = false
+  cluster_encryption_config    = {}
+  # ✅ 로그 타입 설정은 이렇게!
+  cluster_enabled_log_types = ["api", "audit", "authenticator"]
+  
+  cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+    }
+
+    kube-proxy = {
+      resolve_conflicts = "OVERWRITE"
+    }
+
+    vpc-cni = {
+      resolve_conflicts = "OVERWRITE"
+    }
+
+    eks-pod-identity-agent = {
+      resolve_conflicts = "OVERWRITE"
+    }
+
+    metrics-server = {
+      resolve_conflicts = "OVERWRITE"
+    }
+
+    external-dns = {
+      resolve_conflicts = "OVERWRITE"
+    }
+  }
 }
 
