@@ -21,3 +21,4 @@ resource "aws_db_instance" "rds" {
   publicly_accessible    = var.rds_publicly_accessible
   skip_final_snapshot    = true
 }
+
