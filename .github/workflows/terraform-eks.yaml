@@ -71,7 +71,7 @@ jobs:
       - name: Terraform Plan - NodeGroup
         run: terraform plan -no-color -compact-warnings
         working-directory: terraform/eks
-        
+
 
       - name: Terraform Apply - NodeGroup
         id: apply-nodegroup

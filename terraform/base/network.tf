@@ -13,7 +13,9 @@ resource "aws_subnet" "public_subnet_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public_subnet_a"
+    Name                                = "public_subnet_a"
+    "kubernetes.io/role/elb"            = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
 
@@ -24,9 +26,12 @@ resource "aws_subnet" "public_subnet_c" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public_subnet_c"
+    Name                                = "public_subnet_c"
+    "kubernetes.io/role/elb"            = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
+
 
 resource "aws_subnet" "private_subnet_a" {
   vpc_id            = aws_vpc.cgc_pnp_vpc.id
@@ -54,7 +59,9 @@ resource "aws_subnet" "private_subnet_2a" {
   availability_zone = var.availability_zones[0]
 
   tags = {
-    Name = "private_subnet_2a"
+    Name                              = "private_subnet_2a"
+    "kubernetes.io/role/elb"          = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
 
@@ -64,9 +71,12 @@ resource "aws_subnet" "private_subnet_2c" {
   availability_zone = var.availability_zones[1]
 
   tags = {
-    Name = "private_subnet_2c"
+    Name                              = "private_subnet_2c"
+    "kubernetes.io/role/elb"          = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 }
+
 
 resource "aws_subnet" "private_db_a" {
   vpc_id            = aws_vpc.cgc_pnp_vpc.id

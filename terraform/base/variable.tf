@@ -87,3 +87,8 @@ variable "mgmt_instance_type" {
   type    = string
   default = "t3.small"
 }
+
+variable "cluster_name" {
+  description = "EKS Cluster Name"
+  type        = string
+}

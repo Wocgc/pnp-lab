@@ -1,0 +1,56 @@
+name: CI - Web Build & GitOps Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_REGISTRY: 560971842042.dkr.ecr.ap-northeast-2.amazonaws.com
+  WEB_IMAGE: wocgc-web
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | \
+          docker login --username AWS \
+          --password-stdin $ECR_REGISTRY
+
+      - name: Build & Push Web Docker Image
+        run: |
+          GIT_SHA=$(git rev-parse --short HEAD)
+          WEB_TAG=${GIT_SHA}-web
+          docker build -t $ECR_REGISTRY/$WEB_IMAGE:$WEB_TAG ./web
+          docker push $ECR_REGISTRY/$WEB_IMAGE:$WEB_TAG
+          echo "WEB_TAG=$WEB_TAG" >> $GITHUB_ENV
+
+      - name: Update kustomization.yaml (Web)
+        run: |
+          cd web
+          kustomize edit set image $ECR_REGISTRY/$WEB_IMAGE=$ECR_REGISTRY/$WEB_IMAGE:$WEB_TAG
+          cd ..
+
+      - name: Commit & Push Image Tag (Web)
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add web/kustomization.yaml
+          git commit -m "ci: update web image tag to $WEB_TAG"
+          git push origin main
+
