@@ -80,15 +80,14 @@ variable "rds_publicly_accessible" {
 
 variable "mgmt_ami" {
   type    = string
-  default = "ami-0662f4965dfc70aca"
+  default = "ami-0659298dfd77b05dd"
 }
 
 variable "mgmt_instance_type" {
   type    = string
   default = "t3.small"
 }
-
 variable "cluster_name" {
-  description = "EKS Cluster Name"
-  type        = string
+  type    = string
+  default = "cgc-cluster"
 }
